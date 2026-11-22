@@ -1,0 +1,54 @@
+{
+  "version": 7,
+  "voters": {
+    "trend": {
+      "enabled": true,
+      "weight": 1.0,
+      "fast": 20,
+      "slow": 50
+    },
+    "breakout": {
+      "enabled": true,
+      "weight": 0.5,
+      "lookback": 20
+    },
+    "volume": {
+      "enabled": true,
+      "weight": 0.8,
+      "lookback": 20,
+      "min_ratio": 1.3
+    },
+    "volatility": {
+      "enabled": true,
+      "weight": 1.0,
+      "atr_period": 14,
+      "atr_pct_min": 0.01,
+      "atr_pct_max": 0.06
+    },
+    "market_regime": {
+      "enabled": true,
+      "weight": 2.0,
+      "sma": 15
+    },
+    "momentum": {
+      "enabled": true,
+      "weight": 1.0,
+      "lookback": 60,
+      "full_scale": 0.5
+    }
+  },
+  "entry": {
+    "min_score": 3.5,
+    "min_voters_agree": 3
+  },
+  "exit": {
+    "stop_atr": 1.0,
+    "target_atr": 2.0,
+    "max_hold_bars": 10,
+    "atr_period": 14
+  },
+  "risk": {
+    "risk_per_trade_pct": 1.0,
+    "max_position_pct": 20
+  }
+}

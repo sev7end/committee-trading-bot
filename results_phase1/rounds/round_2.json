@@ -1,0 +1,44 @@
+{
+  "round": 2,
+  "time": "2026-09-14T18:51:35",
+  "hypothesis": "Raised trend weight 1.0->2.0 because signals are ranked by score for scarce slots, and trend-neutral entries lost $910 in the weak first half while clean uptrends averaged +$77.",
+  "claude_rc": 0,
+  "accepted": false,
+  "reason": "failed: P&L/DD 3.69 >= 4.21; profitable in both halves (-369 / 9,722)",
+  "metrics": {
+    "trades": 192,
+    "win_rate": 43.75,
+    "total_pnl": 9352.800000000001,
+    "avg_pnl": 48.712500000000006,
+    "avg_win": 313.56988095238097,
+    "avg_loss": -157.2876851851852,
+    "win_loss_ratio": 1.993607322678787,
+    "profit_factor": 1.550583473194612,
+    "max_drawdown": 2536.623253148773,
+    "max_drawdown_pct": 9.788593516900235,
+    "recovery_ratio": 3.687106466594966,
+    "sharpe": 2.2613124387297283,
+    "starting_cash": 25000.0,
+    "ending_equity": 34352.82659422197,
+    "return_pct": 37.4113063768879,
+    "trading_days": 187,
+    "trades_per_day": 1.0267379679144386,
+    "longest_win_streak": 8,
+    "longest_loss_streak": 8,
+    "best_trade": {
+      "symbol": "INTC",
+      "pnl": 1321.46
+    },
+    "worst_trade": {
+      "symbol": "UNH",
+      "pnl": -834.45
+    },
+    "exit_reasons": {
+      "stop": 104,
+      "target": 71,
+      "time": 14,
+      "end_of_data": 3
+    }
+  },
+  "version": 2
+}

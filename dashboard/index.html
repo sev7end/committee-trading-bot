@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Committee Bot Live</title>
+<style>
+:root{color-scheme:light;
+  --surface:#fcfcfb;--panel:#ffffff;--line:#e6e5e1;--grid:#ececea;
+  --ink:#0b0b0b;--ink2:#52514e;--ink3:#8a8985;
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s7:#4a3aa7;--s8:#e34948;
+  --good:#0ca30c;--warn:#fab219;--crit:#d03b3b;
+  --pos:#2a78d6;--neg:#e34948}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --surface:#111214;--panel:#1a1a19;--line:#2a2a28;--grid:#262624;
+  --ink:#ffffff;--ink2:#c3c2b7;--ink3:#8a8985;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s7:#9085e9;--s8:#e66767;
+  --pos:#3987e5;--neg:#e66767}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --surface:#111214;--panel:#1a1a19;--line:#2a2a28;--grid:#262624;
+  --ink:#ffffff;--ink2:#c3c2b7;--ink3:#8a8985;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s7:#9085e9;--s8:#e66767;
+  --pos:#3987e5;--neg:#e66767}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--surface);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:20px 24px 40px}
+h1{font-size:18px;font-weight:600;margin:0;letter-spacing:.01em}
+h2{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin:0 0 10px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.sub{color:var(--ink2);font-size:13px}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:13px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ink3)}
+.dot.live{background:var(--good);box-shadow:0 0 0 3px color-mix(in srgb,var(--good) 25%,transparent);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.grid{display:grid;gap:14px}
+.g-tiles{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.g-2{grid-template-columns:2fr 1fr}
+.g-3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:1000px){.g-2,.g-3{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.tile .k{font-size:12px;color:var(--ink2)}
+.tile .v{font-size:22px;font-weight:600;margin-top:3px}
+.tile .d{font-size:12px;color:var(--ink2);margin-top:2px}
+.hero .v{font-size:44px;line-height:1.05}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink2);margin:0 0 6px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.key{width:14px;height:2px;border-radius:1px;display:inline-block}
+.sw{width:10px;height:10px;border-radius:2px;display:inline-block}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{fill:var(--ink2);font-size:11px;font-variant-numeric:tabular-nums}
+.axis{stroke:var(--grid);stroke-width:1}
+.tip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 6px 24px rgba(0,0,0,.18);display:none;z-index:10;min-width:150px}
+.tip b{font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;font-variant-numeric:tabular-nums}
+th{color:var(--ink2);font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+td:first-child,th:first-child{text-align:left}
+td.txt{text-align:left;white-space:normal;max-width:520px;color:var(--ink2)}
+.wrap{overflow-x:auto}
+.status{display:inline-flex;align-items:center;gap:5px;font-weight:600}
+.status.kept{color:var(--good)}.status.rev{color:var(--crit)}
+.pos{color:var(--pos)}.neg{color:var(--neg)}
+.muted{color:var(--ink3)}
+.section{margin-top:18px}
+.empty{color:var(--ink3);font-size:13px;padding:20px 0;text-align:center}
+.phase{font-size:12px;color:var(--ink2)}
+details summary{cursor:pointer;color:var(--ink2);font-size:13px}
+pre{white-space:pre-wrap;font:12px/1.5 ui-monospace,Consolas,monospace;color:var(--ink2)}
+</style>
+</head>
+<body>
+<div class="tip" id="tip"></div>
+<div class="top">
+  <div>
+    <h1>Committee bot — live research view</h1>
+    <div class="sub" id="subtitle">loading…</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <span class="pill"><span class="dot" id="loopdot"></span><span id="looptxt">loop status</span></span>
+    <span class="pill muted" id="updated">—</span>
+  </div>
+</div>
+
+<div class="grid g-tiles" id="tiles"></div>
+
+<div class="section grid g-2">
+  <div class="card">
+    <h2>Equity — train window <span class="muted" id="eqwin"></span></h2>
+    <div class="legend" id="eqlegend"></div>
+    <div id="eqchart"></div>
+  </div>
+  <div class="card">
+    <h2>Drawdown of best-so-far</h2>
+    <div id="ddchart"></div>
+    <div class="phase" style="margin-top:8px">How far below its previous peak the account sat. Shallower is better.</div>
+  </div>
+</div>
+
+<div class="section grid g-3">
+  <div class="card">
+    <h2>Rounds — profit per unit of drawdown</h2>
+    <div class="legend"><span><span class="sw" style="background:var(--good)"></span>kept</span><span><span class="sw" style="background:var(--crit)"></span>reverted</span><span><span class="key" style="background:var(--s1)"></span>best so far</span></div>
+    <div id="roundchart"></div>
+  </div>
+  <div class="card">
+    <h2>Monthly P&amp;L — best-so-far</h2>
+    <div id="monthchart"></div>
+  </div>
+  <div class="card">
+    <h2>Which voters are right? Mean vote at entry</h2>
+    <div class="legend"><span><span class="sw" style="background:var(--s1)"></span>winning trades</span><span><span class="sw" style="background:var(--s2)"></span>losing trades</span></div>
+    <div id="voterchart"></div>
+    <div class="phase" style="margin-top:6px">A voter that scores higher on winners than losers is adding information. Equal bars mean it is noise.</div>
+  </div>
+</div>
+
+<div class="section grid g-2" id="autowrap">
+  <div class="card">
+    <h2>Autopilot <span class="muted" id="autometa"></span></h2>
+    <div class="grid g-tiles" id="autotiles" style="margin-bottom:10px"></div>
+    <pre id="autoreport" class="phase" style="max-height:260px;overflow:auto"></pre>
+  </div>
+  <div class="card">
+    <h2>Retune history</h2>
+    <div class="wrap"><table id="autohist"></table></div>
+    <div class="phase" style="margin-top:8px">Every 4 weeks a challenger from the compute sweep faces the live champion on the most recent held-out year. It replaces the champion only by a clear margin. The kill switch pauses new entries if live results breach the limits.</div>
+  </div>
+</div>
+
+<div class="section grid g-2" id="sweepwrap" hidden>
+  <div class="card">
+    <h2>Parameter sweep — best score so far <span class="muted" id="sweepmeta"></span></h2>
+    <div id="sweepchart"></div>
+    <div class="phase" style="margin-top:8px">Score = √(stocks P&L/DD × ETF P&L/DD) over the 10-year train window. Only candidates passing every constraint count.</div>
+  </div>
+  <div class="card"><h2>Top candidates</h2><div class="wrap"><table id="sweeptop"></table></div><div class="phase" id="sweepfails" style="margin-top:8px"></div></div>
+</div>
+
+<div class="section card">
+  <h2>Round log</h2>
+  <div class="wrap"><table id="rounds"></table></div>
+</div>
+
+<div class="section grid g-2" id="holdoutwrap" hidden>
+  <div class="card">
+    <h2>Final exam — holdout window <span class="muted" id="howin"></span></h2>
+    <div class="legend" id="holegend"></div>
+    <div id="hochart"></div>
+  </div>
+  <div class="card"><h2>Train vs holdout</h2><div class="wrap"><table id="hotable"></table></div></div>
+</div>
+
+<div class="section grid g-2">
+  <div class="card">
+    <h2>Worst 10 trades — best-so-far</h2>
+    <div class="wrap"><table id="worst"></table></div>
+  </div>
+  <div class="card">
+    <h2>Paper trading</h2>
+    <div id="paper"></div>
+  </div>
+</div>
+
+<div class="section card">
+  <details><summary>Current parameters and changelog</summary>
+  <div class="grid g-2" style="margin-top:10px"><pre id="params"></pre><pre id="changelog"></pre></div></details>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const fmt$ = v => (v==null||isNaN(v)) ? '—' : (v<0?'-':'') + '$' + Math.abs(v).toLocaleString(undefined,{maximumFractionDigits:0});
+const fmt$s = v => (v==null||isNaN(v)) ? '—' : (v<0?'-':'+') + '$' + Math.abs(v).toLocaleString(undefined,{maximumFractionDigits:0});
+const f2 = v => (v==null||isNaN(v)) ? '—' : Number(v).toFixed(2);
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const tip = $('#tip');
+function showTip(html,x,y){tip.innerHTML=html;tip.style.display='block';const r=tip.getBoundingClientRect();tip.style.left=Math.min(x+14,innerWidth-r.width-8)+'px';tip.style.top=Math.max(8,y-r.height-12)+'px'}
+function hideTip(){tip.style.display='none'}
+function svgEl(w,h){const s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.style.height=h+'px';return s}
+function el(n,a={},txt){const e=document.createElementNS('http://www.w3.org/2000/svg',n);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e}
+function niceTicks(lo,hi,n=4){const span=hi-lo||1;const step0=span/n;const p=Math.pow(10,Math.floor(Math.log10(step0)));const m=step0/p;const step=(m<1.5?1:m<3?2:m<7?5:10)*p;const out=[];for(let v=Math.ceil(lo/step)*step;v<=hi+1e-9;v+=step)out.push(+v.toFixed(10));return out}
+
+/* ---------- line chart: multiple series sharing one x (dates) ---------- */
+function lineChart(container, series, opts={}){
+  container.innerHTML='';
+  const W=container.clientWidth||600, H=opts.height||260, L=62,R=16,T=12,B=28;
+  const all=series.flatMap(s=>s.values.filter(v=>v!=null));
+  if(!all.length){container.innerHTML='<div class="empty">no data yet</div>';return}
+  let lo=Math.min(...all,opts.baseline??Infinity), hi=Math.max(...all,opts.baseline??-Infinity);
+  const pad=(hi-lo)*0.08||1; lo-=pad; hi+=pad;
+  const n=Math.max(...series.map(s=>s.values.length));
+  const x=i=>L+(n<=1?0:i/(n-1))*(W-L-R), y=v=>T+(hi-v)/(hi-lo)*(H-T-B);
+  const svg=svgEl(W,H);
+  niceTicks(lo,hi).forEach(t=>{svg.append(el('line',{x1:L,x2:W-R,y1:y(t),y2:y(t),class:'axis'}));svg.append(el('text',{x:L-8,y:y(t)+4,'text-anchor':'end'},opts.fmt?opts.fmt(t):t))});
+  if(opts.baseline!=null)svg.append(el('line',{x1:L,x2:W-R,y1:y(opts.baseline),y2:y(opts.baseline),stroke:cssv('--ink3'),'stroke-width':1}));
+  const dates=series[0].dates||[];
+  const step=Math.max(1,Math.floor(n/6));
+  for(let i=0;i<n;i+=step)if(dates[i])svg.append(el('text',{x:x(i),y:H-8,'text-anchor':'middle'},dates[i].slice(0,7)));
+  series.forEach(s=>{
+    const pts=s.values.map((v,i)=>v==null?null:`${x(i).toFixed(1)},${y(v).toFixed(1)}`).filter(Boolean).join(' ');
+    if(s.fill){const first=x(0),last=x(s.values.length-1);svg.append(el('polygon',{points:`${first},${y(opts.baseline??lo)} ${pts} ${last},${y(opts.baseline??lo)}`,fill:s.color,opacity:.1}))}
+    svg.append(el('polyline',{points:pts,fill:'none',stroke:s.color,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
+    const li=s.values.length-1; if(s.values[li]!=null){svg.append(el('circle',{cx:x(li),cy:y(s.values[li]),r:4.5,fill:s.color,stroke:cssv('--panel'),'stroke-width':2}))}
+  });
+  // crosshair + tooltip
+  const cross=el('line',{y1:T,y2:H-B,stroke:cssv('--ink3'),'stroke-width':1,opacity:0});svg.append(cross);
+  const dotsG=el('g');svg.append(dotsG);
+  const hit=el('rect',{x:L,y:T,width:W-L-R,height:H-T-B,fill:'transparent'});svg.append(hit);
+  hit.addEventListener('mousemove',e=>{const r=svg.getBoundingClientRect();const px=(e.clientX-r.left)*(W/r.width);const i=Math.round((px-L)/(W-L-R)*(n-1));if(i<0||i>=n)return;
+    cross.setAttribute('x1',x(i));cross.setAttribute('x2',x(i));cross.setAttribute('opacity',1);dotsG.innerHTML='';
+    let html=`<b>${dates[i]||i}</b><br>`;series.forEach(s=>{const v=s.values[i];if(v==null)return;dotsG.append(el('circle',{cx:x(i),cy:y(v),r:4,fill:s.color,stroke:cssv('--panel'),'stroke-width':2}));html+=`<span class="sw" style="background:${s.color};display:inline-block;margin-right:6px"></span>${s.name}: <b>${opts.fmt?opts.fmt(v):v}</b><br>`});
+    showTip(html,e.clientX,e.clientY)});
+  hit.addEventListener('mouseleave',()=>{cross.setAttribute('opacity',0);dotsG.innerHTML='';hideTip()});
+  container.append(svg);
+}
+
+/* ---------- column chart with per-bar color; optional overlay step line ---------- */
+function columnChart(container, items, opts={}){
+  container.innerHTML='';
+  const W=container.clientWidth||400, H=opts.height||220, L=56,R=12,T=12,B=28;
+  if(!items.length){container.innerHTML='<div class="empty">no data yet</div>';return}
+  const vals=items.map(d=>d.value).concat(opts.line?opts.line.filter(v=>v!=null):[]);
+  let lo=Math.min(0,...vals), hi=Math.max(0,...vals); const pad=(hi-lo)*0.1||1; hi+=pad; if(lo<0)lo-=pad;
+  const y=v=>T+(hi-v)/(hi-lo)*(H-T-B);
+  const band=(W-L-R)/items.length, bw=Math.min(24,band*0.62);
+  const svg=svgEl(W,H);
+  niceTicks(lo,hi).forEach(t=>{svg.append(el('line',{x1:L,x2:W-R,y1:y(t),y2:y(t),class:'axis'}));svg.append(el('text',{x:L-8,y:y(t)+4,'text-anchor':'end'},opts.fmt?opts.fmt(t):t))});
+  svg.append(el('line',{x1:L,x2:W-R,y1:y(0),y2:y(0),stroke:cssv('--ink3'),'stroke-width':1}));
+  items.forEach((d,i)=>{const cx=L+band*i+band/2;const top=y(Math.max(0,d.value)),bot=y(Math.min(0,d.value));const h=Math.max(1,bot-top);
+    const r=Math.min(4,h/2);const up=d.value>=0;
+    // rounded data-end, square baseline
+    const path=up?`M${cx-bw/2},${bot} V${top+r} a${r},${r} 0 0 1 ${r},-${r} H${cx+bw/2-r} a${r},${r} 0 0 1 ${r},${r} V${bot} Z`
+                 :`M${cx-bw/2},${top} V${bot-r} a${r},${r} 0 0 0 ${r},${r} H${cx+bw/2-r} a${r},${r} 0 0 0 ${r},-${r} V${top} Z`;
+    const p=el('path',{d:path,fill:d.color});svg.append(p);
+    const hitR=el('rect',{x:L+band*i,y:T,width:band,height:H-T-B,fill:'transparent'});svg.append(hitR);
+    hitR.addEventListener('mousemove',e=>showTip(d.tip||`<b>${d.label}</b><br>${opts.fmt?opts.fmt(d.value):d.value}`,e.clientX,e.clientY));hitR.addEventListener('mouseleave',hideTip);
+    if(items.length<=14||i%Math.ceil(items.length/10)===0)svg.append(el('text',{x:cx,y:H-8,'text-anchor':'middle'},d.label));
+  });
+  if(opts.line){const pts=opts.line.map((v,i)=>v==null?null:`${(L+band*i+band/2).toFixed(1)},${y(v).toFixed(1)}`).filter(Boolean).join(' ');svg.append(el('polyline',{points:pts,fill:'none',stroke:opts.lineColor,'stroke-width':2,'stroke-linejoin':'round'}))}
+  container.append(svg);
+}
+
+/* ---------- grouped bars (2 groups) ---------- */
+function groupedBars(container, rows, opts={}){
+  container.innerHTML='';
+  const W=container.clientWidth||400,H=opts.height||220,L=50,R=12,T=12,B=28;
+  if(!rows.length){container.innerHTML='<div class="empty">no data yet</div>';return}
+  const vals=rows.flatMap(r=>[r.a,r.b]).filter(v=>v!=null);let lo=Math.min(-0.1,...vals),hi=Math.max(0.1,...vals);const pad=(hi-lo)*.1;hi+=pad;lo-=pad;
+  const y=v=>T+(hi-v)/(hi-lo)*(H-T-B);const band=(W-L-R)/rows.length,bw=Math.min(18,band*0.3);
+  const svg=svgEl(W,H);
+  niceTicks(lo,hi).forEach(t=>{svg.append(el('line',{x1:L,x2:W-R,y1:y(t),y2:y(t),class:'axis'}));svg.append(el('text',{x:L-8,y:y(t)+4,'text-anchor':'end'},t.toFixed(1)))});
+  svg.append(el('line',{x1:L,x2:W-R,y1:y(0),y2:y(0),stroke:cssv('--ink3'),'stroke-width':1}));
+  rows.forEach((r,i)=>{const cx=L+band*i+band/2;[[r.a,opts.colorA,-bw/2-1],[r.b,opts.colorB,bw/2+1]].forEach(([v,c,off])=>{if(v==null)return;const top=y(Math.max(0,v)),bot=y(Math.min(0,v));svg.append(el('rect',{x:cx+off-bw/2,y:top,width:bw,height:Math.max(1,bot-top),fill:c,rx:3}))});
+    const hitR=el('rect',{x:L+band*i,y:T,width:band,height:H-T-B,fill:'transparent'});svg.append(hitR);
+    hitR.addEventListener('mousemove',e=>showTip(`<b>${r.label}</b><br>winners: <b>${f2(r.a)}</b><br>losers: <b>${f2(r.b)}</b>`,e.clientX,e.clientY));hitR.addEventListener('mouseleave',hideTip);
+    svg.append(el('text',{x:cx,y:H-8,'text-anchor':'middle'},r.label.replace('market_regime','regime').replace('volatility','volat.')))});
+  container.append(svg);
+}
+
+function drawdown(values){let peak=-Infinity;return values.map(v=>{peak=Math.max(peak,v);return -(peak-v)})}
+function halves(eq){if(!eq||eq.values.length<10)return null;const m=Math.floor(eq.values.length/2);return{first:eq.values[m]-eq.values[0],second:eq.values.at(-1)-eq.values[m],mid:eq.dates[m]}}
+function elapsed(iso){if(!iso)return'';const s=Math.max(0,(Date.now()-new Date(iso))/1000);return s<90?`${Math.round(s)}s`:`${Math.round(s/60)} min`}
+
+let lastState=null;
+function render(S){
+  lastState=S;
+  const best=S.best,base=S.baseline,cur=S.current;
+  const win=S.settings.windows.train;
+  $('#subtitle').textContent=`Train ${win.start} → ${win.end} · ${S.settings.account.starting_cash.toLocaleString()} starting cash · costs: ${S.settings.costs.spread_bps} bps spread + ${S.settings.costs.slippage_bps} bps slippage`;
+  $('#updated').textContent='updated '+new Date(S.generated).toLocaleTimeString();
+  $('#eqwin').textContent='';
+  // loop status
+  const L=S.loop;$('#loopdot').className='dot'+(L.running?' live':'');
+  if(L.running){const ph=L.phase?` · ${L.phase}${L.phase_started?' for '+elapsed(L.phase_started):''}`:'';$('#looptxt').textContent=`round ${L.round||L.next_round} running${ph}`}else $('#looptxt').textContent='loop idle';
+
+  // tiles
+  const m=best?.metrics;const h=best?halves(best.equity):null;
+  const tiles=[];
+  if(m){
+    tiles.push({k:`Best so far · v${best.params_version}`,v:fmt$s(m.total_pnl),d:`${m.return_pct.toFixed(1)}% return · ${m.trades} trades`,hero:true,cls:m.total_pnl>=0?'pos':'neg'});
+    tiles.push({k:'Profit factor',v:f2(m.profit_factor),d:base?`baseline ${f2(base.metrics.profit_factor)}`:''});
+    tiles.push({k:'P&L / max drawdown',v:f2(m.recovery_ratio),d:'what the loop optimises'});
+    tiles.push({k:'Max drawdown',v:fmt$(-m.max_drawdown),d:`${m.max_drawdown_pct.toFixed(1)}% of account`,cls:'neg'});
+    tiles.push({k:'Win rate',v:m.win_rate.toFixed(0)+'%',d:`avg win ${fmt$s(m.avg_win)} · avg loss ${fmt$s(m.avg_loss)}`});
+    if(h)tiles.push({k:'P&L by half',v:`${fmt$s(h.first)} / ${fmt$s(h.second)}`,d:`split at ${h.mid} · both must be positive`,cls:(h.first>0&&h.second>0)?'pos':'neg'});
+    tiles.push({k:'Rounds',v:`${S.rounds.length}`,d:`${S.rounds.filter(r=>r.accepted).length} kept · ${S.rounds.filter(r=>!r.accepted).length} reverted`});
+  }
+  $('#tiles').innerHTML=tiles.map(t=>`<div class="card tile ${t.hero?'hero':''}"><div class="k">${t.k}</div><div class="v ${t.cls||''}">${t.v}</div><div class="d">${t.d||''}</div></div>`).join('');
+
+  // equity chart
+  const series=[];
+  if(base?.equity)series.push({name:'Dumb baseline',color:cssv('--s2'),...base.equity});
+  if(best?.equity)series.push({name:`Best so far (v${best.params_version})`,color:cssv('--s1'),...best.equity,fill:true});
+  if(cur?.equity&&L.running&&JSON.stringify(cur.equity.values)!==JSON.stringify(best?.equity?.values))series.push({name:'Candidate being tested',color:cssv('--s3'),...cur.equity});
+  $('#eqlegend').innerHTML=series.map(s=>`<span><span class="key" style="background:${s.color}"></span>${s.name}</span>`).join('');
+  lineChart($('#eqchart'),series,{fmt:fmt$,baseline:S.settings.account.starting_cash,height:280});
+  if(best?.equity)lineChart($('#ddchart'),[{name:'Drawdown',color:cssv('--s8'),dates:best.equity.dates,values:drawdown(best.equity.values),fill:true}],{fmt:fmt$,baseline:0,height:280});
+
+  // rounds chart
+  let bestSoFar=null;const rc=S.rounds.map(r=>{const v=r.metrics?.recovery_ratio??0;if(r.accepted)bestSoFar=v;return{label:String(r.round),value:v,color:r.accepted?cssv('--good'):cssv('--crit'),line:bestSoFar,tip:`<b>round ${r.round}</b> — ${r.accepted?'kept':'reverted'}<br>P&L/DD <b>${f2(v)}</b> · PF ${f2(r.metrics?.profit_factor)}<br><span style="color:var(--ink2)">${(r.hypothesis||'').slice(0,140)}</span>`}});
+  columnChart($('#roundchart'),rc,{fmt:f2,line:rc.map(d=>d.line),lineColor:cssv('--s1')});
+  // monthly
+  columnChart($('#monthchart'),(best?.monthly_pnl||[]).map(d=>({label:d.month.slice(2),value:d.pnl,color:d.pnl>=0?cssv('--pos'):cssv('--neg'),tip:`<b>${d.month}</b><br>${fmt$s(d.pnl)}`})),{fmt:fmt$});
+  // voters
+  groupedBars($('#voterchart'),(best?.voter_diag||[]).map(d=>({label:d.voter,a:d.winners,b:d.losers})),{colorA:cssv('--s1'),colorB:cssv('--s2')});
+
+  // round table
+  const rows=[...S.rounds].reverse();
+  $('#rounds').innerHTML=`<tr><th>#</th><th>Time</th><th>Result</th><th>Ver</th><th>Trades</th><th>P&L</th><th>PF</th><th>Max DD</th><th>P&L/DD</th><th style="text-align:left">Hypothesis</th><th style="text-align:left">Why</th></tr>`+
+    (rows.length?rows.map(r=>{const mm=r.metrics||{};return`<tr><td>${r.round}</td><td>${(r.time||'').slice(11,16)}</td><td><span class="status ${r.accepted?'kept':'rev'}">${r.accepted?'✓ kept':'✕ reverted'}</span></td><td>v${r.version??''}</td><td>${mm.trades??'—'}</td><td class="${(mm.total_pnl||0)>=0?'pos':'neg'}">${fmt$s(mm.total_pnl)}</td><td>${f2(mm.profit_factor)}</td><td>${fmt$(-(mm.max_drawdown||0))}</td><td>${f2(mm.recovery_ratio)}</td><td class="txt">${r.hypothesis||''}</td><td class="txt">${r.accepted?'':(r.reason||'')}</td></tr>`}).join(''):`<tr><td colspan="11" class="empty">no rounds yet</td></tr>`);
+
+  // holdout
+  const ho=S.holdout;$('#holdoutwrap').hidden=!ho;
+  if(ho){const hw=S.settings.windows.holdout;$('#howin').textContent=`${hw.start} → ${hw.end}`;const hs=[];if(S.baseline_holdout?.equity)hs.push({name:'Dumb baseline',color:cssv('--s2'),...S.baseline_holdout.equity});hs.push({name:`Best (v${ho.params_version})`,color:cssv('--s1'),...ho.equity,fill:true});
+    $('#holegend').innerHTML=hs.map(s=>`<span><span class="key" style="background:${s.color}"></span>${s.name}</span>`).join('');lineChart($('#hochart'),hs,{fmt:fmt$,baseline:S.settings.account.starting_cash,height:260});
+    const row=(l,x)=>x?`<tr><td>${l}</td><td>${x.metrics.trades}</td><td class="${x.metrics.total_pnl>=0?'pos':'neg'}">${fmt$s(x.metrics.total_pnl)}</td><td>${f2(x.metrics.profit_factor)}</td><td>${fmt$(-x.metrics.max_drawdown)}</td><td>${f2(x.metrics.recovery_ratio)}</td></tr>`:'';
+    $('#hotable').innerHTML=`<tr><th>Run</th><th>Trades</th><th>P&L</th><th>PF</th><th>Max DD</th><th>P&L/DD</th></tr>`+row('Best — train',best)+row('Best — holdout',ho)+row('Baseline — train',base)+row('Baseline — holdout',S.baseline_holdout)}
+
+  // worst trades
+  const tr=(best?.trades||[]).slice().sort((a,b)=>a.pnl-b.pnl).slice(0,10);
+  $('#worst').innerHTML=`<tr><th>Symbol</th><th>Entry</th><th>Exit</th><th>Held</th><th>P&L</th><th>Exit</th><th>Score</th></tr>`+(tr.length?tr.map(t=>`<tr><td>${t.symbol}</td><td>${t.entry_date}</td><td>${t.exit_date}</td><td>${t.bars_held}d</td><td class="neg">${fmt$s(t.pnl)}</td><td>${t.exit_reason}</td><td>${f2(t.score_total)}</td></tr>`).join(''):'<tr><td colspan=7 class="empty">no trades</td></tr>');
+
+  // autopilot
+  const A=S.autopilot||{};const st=A.state||{};const lv=A.live;
+  $('#autometa').textContent=(st.last_run?`· last run ${new Date(st.last_run).toLocaleString()}`:'· not run yet')+(A.paused?' · ⏸ PAUSED':' · ● trading');
+  const at=[];const AL=S.alpaca;
+  if(AL&&!AL.error){const chg=AL.equity-AL.last_equity;at.push({k:'Account equity (live)',v:fmt$(AL.equity),d:`cash ${fmt$(AL.cash)} · ${AL.market_open?'market OPEN':'market closed'}`});at.push({k:'Change since prev. close',v:fmt$s(chg),d:`${(chg/AL.last_equity*100).toFixed(2)}%`,cls:chg>=0?'pos':'neg'});at.push({k:'Open positions (live)',v:AL.positions.length,d:`unrealised ${fmt$s(AL.unrealized_total)}`,cls:AL.unrealized_total>=0?'pos':'neg'});}
+  else if(AL&&AL.error){at.push({k:'Alpaca',v:'unreachable',d:AL.error.slice(0,60),cls:'neg'});}
+  if(lv){at.push({k:'Closed trades (as of Sat.)',v:lv.trades,d:`win rate ${lv.win_rate.toFixed(0)}% · realised ${fmt$s(lv.total_pnl)} · PF ${f2(lv.profit_factor)}`});at.push({k:'Live drawdown (as of Sat.)',v:fmt$(-lv.max_drawdown),d:`${lv.max_drawdown_pct_of_cap.toFixed(1)}% of cap · kill at ${(S.settings.autopilot||{}).kill_switch?.max_drawdown_pct??10}%`,cls:'neg'});}
+  if(A.gap){at.push({k:'Reality gap (as of Sat.)',v:fmt$s((A.gap.live_pnl||0)-(A.gap.sim_pnl||0)),d:`live ${fmt$s(A.gap.live_pnl||0)} vs sim ${fmt$s(A.gap.sim_pnl||0)} since ${A.gap.window?.[0]||''}`});}
+  at.push({k:'Next retune',v:st.last_retune?new Date(new Date(st.last_retune).getTime()+((S.settings.autopilot||{}).retune_every_days||28)*864e5).toLocaleDateString():'—',d:`stall count ${st.stall_count??0}`});
+  $('#autotiles').innerHTML=at.map(t=>`<div class="tile"><div class="k">${t.k}</div><div class="v ${t.cls||''}" style="font-size:18px">${t.v}</div><div class="d">${t.d||''}</div></div>`).join('');
+  $('#autoreport').textContent=A.report||'No report yet. The autopilot runs Saturdays at 12:00.';
+  const hist=(st.history||[]).slice().reverse();
+  $('#autohist').innerHTML=`<tr><th>Date</th><th>Champion</th><th>Source</th><th>Decision</th><th style="text-align:left">Why</th></tr>`+(hist.length?hist.map(h=>`<tr><td>${h.date}</td><td>v${h.champion_version}</td><td>${h.challenger_source||'—'}</td><td class="${h.replaced?'pos':''}">${h.replaced?'replaced → v'+h.new_version:'kept'}</td><td class="txt">${h.reason||''}</td></tr>`).join(''):'<tr><td colspan=5 class="empty">no retunes yet</td></tr>');
+  // sweep
+  const SW=S.sweep;$('#sweepwrap').hidden=!SW;
+  if(SW){$('#sweepmeta').textContent=`· ${SW.evals} evaluations · ${SW.passed} passed · last ${new Date(SW.log_mtime).toLocaleTimeString()}`;
+    lineChart($('#sweepchart'),[{name:'best score',color:cssv('--s1'),dates:SW.running_best.map((_,i)=>String(i)),values:SW.running_best,fill:true}],{fmt:f2,baseline:0,height:220});
+    $('#sweeptop').innerHTML=`<tr><th>#</th><th>Score</th><th>Stocks PF</th><th>Stocks P&L/DD</th><th>Stocks P&L</th><th>Max DD</th><th>Years +</th><th>ETF PF</th><th>ETF P&L/DD</th></tr>`+SW.top.map(t=>`<tr><td>${t.i}</td><td>${f2(t.score)}</td><td>${f2(t.s_pf)}</td><td>${f2(t.s_ratio)}</td><td class="pos">${fmt$s(t.s_pnl)}</td><td class="neg">${fmt$(-(t.s_dd||0))}</td><td>${Math.round(t.s_pos_years||0)}%</td><td>${f2(t.e_pf)}</td><td>${f2(t.e_ratio)}</td></tr>`).join('');
+    $('#sweepfails').textContent='Why candidates were rejected: '+Object.entries(SW.fails).filter(([k])=>k!=='PASS').map(([k,v])=>`${k} ${v}`).join(' · ');}
+  // paper
+  const P=S.paper;let ph='';
+  if(AL&&!AL.error){ph+=`<div class="phase" style="margin-bottom:6px">Open positions on Alpaca · ${new Date(AL.as_of).toLocaleTimeString()} · unrealised <b class="${AL.unrealized_total>=0?'pos':'neg'}">${fmt$s(AL.unrealized_total)}</b></div>`;
+    ph+=AL.positions.length?`<div class="wrap"><table><tr><th>Symbol</th><th>Qty</th><th>Entry</th><th>Now</th><th>P&L</th><th>%</th><th>Stop</th><th>Target</th><th>Since</th><th>Book</th></tr>${AL.positions.map(p=>`<tr><td>${p.symbol}</td><td>${p.qty}</td><td>${p.avg_entry.toFixed(2)}</td><td>${p.price.toFixed(2)}</td><td class="${p.unrealized_pl>=0?'pos':'neg'}">${fmt$s(p.unrealized_pl)}</td><td class="${p.unrealized_pl>=0?'pos':'neg'}">${p.unrealized_plpc.toFixed(2)}%</td><td>${p.stop??''}</td><td>${p.target??''}</td><td>${p.entry_date??''}</td><td>${p.book??''}</td></tr>`).join('')}</table></div>`:'<div class="empty">No open positions.</div>';}
+  if(!P.orders.length&&!P.signals){if(!ph)ph='<div class="empty">Not started yet.</div>';}
+  else{if(P.signals)ph+=`<div class="phase" style="margin-bottom:6px">Latest signals (${P.signals.file})</div><div class="wrap"><table><tr><th>Symbol</th><th>Close</th><th>Score</th><th>Agree</th><th>Enter</th></tr>${P.signals.rows.slice(0,8).map(r=>`<tr><td>${r.symbol}</td><td>${Number(r.close).toFixed(2)}</td><td>${f2(r.total)}</td><td>${r.agree}</td><td>${r.enter?'✓':''}</td></tr>`).join('')}</table></div>`;
+    if(P.orders.length)ph+=`<div class="phase" style="margin:10px 0 6px">Orders (${P.orders.length} recent)</div><div class="wrap"><table><tr><th>Time</th><th>Symbol</th><th>Action</th><th>Qty</th><th>Ref</th><th>Stop</th><th>Target</th><th>Mode</th></tr>${P.orders.slice().reverse().slice(0,12).map(o=>`<tr><td>${String(o.time).slice(0,16)}</td><td>${o.symbol}</td><td>${o.action}</td><td>${o.qty??''}</td><td>${o.ref_price??''}</td><td>${o.stop??''}</td><td>${o.target??''}</td><td>${o.dry_run===true||o.dry_run==='True'?'dry run':'live paper'}</td></tr>`).join('')}</table></div>`}
+  $('#paper').innerHTML=ph;
+  $('#params').textContent=JSON.stringify(S.params,null,2);
+  $('#changelog').textContent=S.changelog;
+}
+
+async function refresh(){try{const r=await fetch('/api/state',{cache:'no-store'});render(await r.json())}catch(e){$('#updated').textContent='server unreachable';}}
+refresh();setInterval(refresh,10000);
+window.addEventListener('resize',()=>{if(lastState)render(lastState)});
+</script>
+</body>
+</html>

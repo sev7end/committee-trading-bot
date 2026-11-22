@@ -1,0 +1,49 @@
+{
+  "label": "round 12",
+  "window": {
+    "start": "2025-09-01",
+    "end": "2026-05-31"
+  },
+  "metrics": {
+    "trades": 173,
+    "win_rate": 43.93063583815029,
+    "total_pnl": 11560.129999999996,
+    "avg_pnl": 66.82156069364159,
+    "avg_win": 371.1867105263158,
+    "avg_loss": -171.65010309278352,
+    "win_loss_ratio": 2.1624613317340975,
+    "profit_factor": 1.694299600121561,
+    "max_drawdown": 2104.732246304742,
+    "max_drawdown_pct": 7.917837283676271,
+    "recovery_ratio": 5.492446851753235,
+    "sharpe": 2.641282523906522,
+    "starting_cash": 25000.0,
+    "ending_equity": 36560.13682726747,
+    "return_pct": 46.2405473090699,
+    "trading_days": 187,
+    "trades_per_day": 0.9251336898395722,
+    "longest_win_streak": 6,
+    "longest_loss_streak": 9,
+    "best_trade": {
+      "symbol": "INTC",
+      "pnl": 1473.93
+    },
+    "worst_trade": {
+      "symbol": "NFLX",
+      "pnl": -526.2
+    },
+    "exit_reasons": {
+      "stop": 90,
+      "target": 67,
+      "time": 13,
+      "end_of_data": 3
+    }
+  },
+  "skipped": {
+    "no_cash": 0,
+    "max_positions": 958,
+    "already_in": 0,
+    "zero_shares": 0
+  },
+  "params_version": 6
+}

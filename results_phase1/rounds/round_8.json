@@ -1,0 +1,44 @@
+{
+  "round": 8,
+  "time": "2026-09-14T19:15:33",
+  "hypothesis": "Widened momentum.full_scale 0.3->0.5 because ~45 of 171 trades tie at momentum 1.0, so scarce slots pick arbitrarily; un-saturating ranks the strongest movers (INTC/AMD) first.",
+  "claude_rc": 0,
+  "accepted": true,
+  "reason": "accepted",
+  "metrics": {
+    "trades": 177,
+    "win_rate": 44.632768361581924,
+    "total_pnl": 12622.679999999995,
+    "avg_pnl": 71.31457627118641,
+    "avg_win": 363.79607594936704,
+    "avg_loss": -164.4613265306123,
+    "win_loss_ratio": 2.21204634319699,
+    "profit_factor": 1.7831802154343084,
+    "max_drawdown": 2423.293118768812,
+    "max_drawdown_pct": 9.116238247763201,
+    "recovery_ratio": 5.208895243516032,
+    "sharpe": 2.8430560752670893,
+    "starting_cash": 25000.0,
+    "ending_equity": 37622.68418828419,
+    "return_pct": 50.49073675313676,
+    "trading_days": 187,
+    "trades_per_day": 0.946524064171123,
+    "longest_win_streak": 9,
+    "longest_loss_streak": 11,
+    "best_trade": {
+      "symbol": "INTC",
+      "pnl": 1456.99
+    },
+    "worst_trade": {
+      "symbol": "AMD",
+      "pnl": -359.78
+    },
+    "exit_reasons": {
+      "stop": 92,
+      "target": 69,
+      "time": 13,
+      "end_of_data": 3
+    }
+  },
+  "version": 6
+}

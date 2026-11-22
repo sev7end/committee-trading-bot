@@ -1,0 +1,17 @@
+**Change made: added one new voter, `momentum`.**
+
+Why, in plain terms:
+
+The metrics file shows `skipped.max_positions = 865`. The committee produced roughly 1,033 buy signals but only 5 positions can be open at a time, so only 168 were actually taken — **84% of signals were turned away for lack of a slot**. When more signals arrive than there are slots, the engine sorts them by total score and fills the best first (`backtest.py:216`).
+
+But the score barely discriminates. Looking at the trade log, the same handful of totals repeat over and over — 4.8, 5.3, 6.3 — because four of the five voters are effectively on/off switches and saturate. When candidates tie, Python's sort is stable, so the winner is whichever symbol happens to come first in the data dictionary. In other words, the single highest-leverage decision the system makes — *which* five stocks to own — has been settled alphabetically.
+
+The new voter scores each stock's 60-day return, scaled so +30% reads as +1 and -30% as -1, clipped in between. It is continuous, so it breaks every one of those ties by an actual quality measure: among five equally-rated breakout candidates, the slot goes to the one that has been strongest over the last three months. That is cross-sectional momentum — about as universal and un-tuned a rule as exists, not a symbol-specific patch.
+
+Two spot checks against the existing trades: the NFLX entry of 2025-10-20 (−$406) had only ~+5% of 60-day momentum and would have ranked near the bottom of its day's candidates, while INTC in April 2026 (which produced +$1,474 and several other large wins) was up enormously and would have ranked at the top.
+
+One honest caveat: the extra weight raises the maximum total from 6.3 to 7.3, so the 3.5 entry gate is slightly looser in relative terms, and a few weak-momentum entries (including the lucky NFLX bounce of 2026-02-26, +$692) will now score below the gate. With 865 signals queued for every slot, I expect re-ranking to dominate that effect, but it's the part of this change I'm least certain about.
+
+Files touched: `tradingbot/voters/momentum.py` (new), `config/params.json` (one voter entry added), `results/rounds/round_6.hypothesis.txt`.
+
+I did not run the backtest — the Bash tool is disabled in this session, so the analysis above is read-only from `results/best/trades.csv`, `metrics.json`, and the cached price data. The loop will score the change.

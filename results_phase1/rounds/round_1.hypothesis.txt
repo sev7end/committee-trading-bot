@@ -1,0 +1,1 @@
+Raised market_regime weight 1.0->2.0 and min_score 2.5->3.5 so a bearish SPY regime vetoes entries because all 7 counter-regime trades netted -$115 and one sat inside the max drawdown.

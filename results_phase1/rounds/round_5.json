@@ -1,0 +1,44 @@
+{
+  "round": 5,
+  "time": "2026-09-14T19:04:06",
+  "hypothesis": "Widened exit.stop_atr 1.0->1.5 with target_atr 2.0->3.0 because only 5 of 87 stop-outs gapped past 1.5 ATR, so the 1.0 ATR stop sits inside daily noise; scaling both keeps the 2:1 payoff.",
+  "claude_rc": 0,
+  "accepted": false,
+  "reason": "failed: P&L/DD 3.18 >= 4.54",
+  "metrics": {
+    "trades": 131,
+    "win_rate": 50.38167938931297,
+    "total_pnl": 7422.279999999997,
+    "avg_pnl": 56.65862595419845,
+    "avg_win": 326.77363636363646,
+    "avg_loss": -217.61199999999997,
+    "win_loss_ratio": 1.501634268163688,
+    "profit_factor": 1.5247363338277449,
+    "max_drawdown": 2331.473016982636,
+    "max_drawdown_pct": 7.535097585761301,
+    "recovery_ratio": 3.1835152909493334,
+    "sharpe": 2.0965056788764587,
+    "starting_cash": 25000.0,
+    "ending_equity": 32422.248074959785,
+    "return_pct": 29.688992299839146,
+    "trading_days": 187,
+    "trades_per_day": 0.7005347593582888,
+    "longest_win_streak": 5,
+    "longest_loss_streak": 8,
+    "best_trade": {
+      "symbol": "AMD",
+      "pnl": 996.27
+    },
+    "worst_trade": {
+      "symbol": "UNH",
+      "pnl": -898.94
+    },
+    "exit_reasons": {
+      "stop": 57,
+      "time": 36,
+      "target": 33,
+      "end_of_data": 5
+    }
+  },
+  "version": 3
+}

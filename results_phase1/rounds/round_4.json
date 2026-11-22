@@ -1,0 +1,44 @@
+{
+  "round": 4,
+  "time": "2026-09-14T18:59:39",
+  "hypothesis": "Sped up the market_regime average (sma 50->20) because the whole max drawdown sits in the Sep-Nov chop where SPY stayed above its slow average, so the veto never fired.",
+  "claude_rc": 0,
+  "accepted": true,
+  "reason": "accepted",
+  "metrics": {
+    "trades": 168,
+    "win_rate": 45.83333333333333,
+    "total_pnl": 10708.689999999995,
+    "avg_pnl": 63.74220238095235,
+    "avg_win": 335.03545454545457,
+    "avg_loss": -165.81362637362636,
+    "win_loss_ratio": 2.0205544132454,
+    "profit_factor": 1.709699888130723,
+    "max_drawdown": 2383.947616984213,
+    "max_drawdown_pct": 9.034022567550016,
+    "recovery_ratio": 4.491998869315303,
+    "sharpe": 2.5469780680866143,
+    "starting_cash": 25000.0,
+    "ending_equity": 35708.71466499529,
+    "return_pct": 42.83485865998118,
+    "trading_days": 187,
+    "trades_per_day": 0.8983957219251337,
+    "longest_win_streak": 7,
+    "longest_loss_streak": 8,
+    "best_trade": {
+      "symbol": "INTC",
+      "pnl": 1473.93
+    },
+    "worst_trade": {
+      "symbol": "NFLX",
+      "pnl": -526.2
+    },
+    "exit_reasons": {
+      "stop": 87,
+      "target": 67,
+      "time": 11,
+      "end_of_data": 3
+    }
+  },
+  "version": 3
+}

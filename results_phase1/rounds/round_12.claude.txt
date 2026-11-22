@@ -1,0 +1,12 @@
+**Change made (one):** `market_regime.sma` 20 → 15 in `config/params.json`.
+
+**Why this and not the alternatives I considered:**
+- *Exit widening* — round 5 already tried scaling stop and target together and it was reverted.
+- *Volume/trend/breakout weights* — rounds 10 and 11 reverted weight cuts, and when I split the 177 trades by momentum score the two halves averaged $71.2 vs $71.4, so the voter scores barely separate winners from losers within the trades that get taken. Ranking tweaks have run out of road.
+- *A new voter* — round 9's pullback voter cut P&L by two thirds. More rules here means more overfitting, and I had a one-number fix with hand-verified evidence.
+
+One thing worth flagging that I found but did not act on: `risk.risk_per_trade_pct` is effectively **inert**. `backtest.py:153` sizes each position at `min(equity·1%/ATR, equity·20%/price, cash/price)`, and for a typical 2% ATR stock the risk term works out to ~50% of equity — so the 20% notional cap always binds. Position sizing is equal-dollar, not risk-parity, which is why the high-ATR names (INTC, AMD, AVGO) dominate both the worst-10 list and the biggest wins. That's a structural lever for a future round, but changing it would rescale every trade at once and I did not want to spend this round's single change on something that unpredictable.
+
+**Hypothesis written to** `results/rounds/round_12.hypothesis.txt`.
+
+Estimated effect: P&L ≈ $13,470, first half ≈ $971 (up from $344), and since the blocked October and December clusters sit inside the drawdown, the recovery ratio should clear the 5.26 bar with room. These are my hand-computed projections, not a backtest run — the loop's acceptance check is what settles it.

@@ -1,0 +1,55 @@
+{
+  "version": 0,
+  "_comment": "neutral seed: single-coin mean reversion (pullback + short RSI in an uptrend, BTC regime filter)",
+  "voters": {
+    "trend": {
+      "enabled": true,
+      "weight": 1.0,
+      "fast": 20,
+      "slow": 100
+    },
+    "pullback": {
+      "enabled": true,
+      "weight": 1.5,
+      "sma": 20,
+      "full_atr": 1.5
+    },
+    "rsi": {
+      "enabled": true,
+      "weight": 1.0,
+      "period": 3,
+      "low": 15,
+      "high": 85
+    },
+    "market_regime": {
+      "enabled": true,
+      "weight": 1.0,
+      "sma": 100
+    },
+    "volatility": {
+      "enabled": true,
+      "weight": 1.0,
+      "atr_period": 14,
+      "atr_pct_min": 0.01,
+      "atr_pct_max": 0.15
+    }
+  },
+  "entry": {
+    "min_score": 3.0,
+    "min_voters_agree": 3
+  },
+  "exit": {
+    "stop_atr": 2.5,
+    "target_atr": 1.0,
+    "trail_atr": 0,
+    "max_hold_bars": 5,
+    "atr_period": 14
+  },
+  "risk": {
+    "risk_per_trade_pct": 1.0,
+    "max_position_pct": 50,
+    "vol_target": {
+      "enabled": false
+    }
+  }
+}

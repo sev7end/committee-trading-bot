@@ -1,0 +1,44 @@
+{
+  "round": 3,
+  "time": "2026-09-14T18:55:22",
+  "hypothesis": "Raised entry.min_score 3.5->5.0 because in a bull regime trend+volatility+market_regime already total 4.0, so the old gate let in no-breakout trades; now a breakout vote is required to enter.",
+  "claude_rc": 0,
+  "accepted": false,
+  "reason": "failed: P&L/DD 2.62 >= 4.21; profitable in both halves (-1,351 / 9,591)",
+  "metrics": {
+    "trades": 136,
+    "win_rate": 41.911764705882355,
+    "total_pnl": 8239.94,
+    "avg_pnl": 60.587794117647064,
+    "avg_win": 345.40421052631586,
+    "avg_loss": -144.91265822784814,
+    "win_loss_ratio": 2.3835337419815468,
+    "profit_factor": 1.7197648518094704,
+    "max_drawdown": 3139.7806223936786,
+    "max_drawdown_pct": 12.11252522266669,
+    "recovery_ratio": 2.6243680661096973,
+    "sharpe": 2.332472432144018,
+    "starting_cash": 25000.0,
+    "ending_equity": 33239.975990384075,
+    "return_pct": 32.9599039615363,
+    "trading_days": 187,
+    "trades_per_day": 0.7272727272727273,
+    "longest_win_streak": 10,
+    "longest_loss_streak": 7,
+    "best_trade": {
+      "symbol": "INTC",
+      "pnl": 1321.46
+    },
+    "worst_trade": {
+      "symbol": "PLTR",
+      "pnl": -304.49
+    },
+    "exit_reasons": {
+      "stop": 77,
+      "target": 52,
+      "time": 6,
+      "end_of_data": 1
+    }
+  },
+  "version": 2
+}

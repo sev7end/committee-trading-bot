@@ -1,0 +1,1 @@
+Raised trend weight 1.0->2.0 because signals are ranked by score for scarce slots, and trend-neutral entries lost $910 in the weak first half while clean uptrends averaged +$77.

@@ -1,0 +1,7 @@
+Round 11 change made — one number:
+
+**`config/params.json`: `voters.trend.weight` 1.0 → 0.5**
+
+In plain terms: the trend voter is the one that says "this stock is in a clean uptrend." It votes yes on almost every stock the bot buys, so it never helps *choose* between candidates — it just adds the same 1.0 to everyone. But because it's bundled into the score used to rank candidates for the 5 available slots, it quietly pushes the already-extended names to the front of the queue. Those are the ones that reverse a day or two after entry (about 50 of the 92 stop-outs die within 2 bars). Halving its weight leaves the buy/don't-buy rule essentially untouched and lets the 10-out-of-177 "not a textbook uptrend yet" setups — the early-turn names like the INTC and UNH entries in April that made +$535 and +$686 — compete for slots.
+
+Hypothesis written to `results/rounds/round_11.hypothesis.txt`. I did not run the backtest; the loop's acceptance check will score it.

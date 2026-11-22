@@ -1,0 +1,1 @@
+Raised entry.min_score 3.5->5.0 because in a bull regime trend+volatility+market_regime already total 4.0, so the old gate let in no-breakout trades; now a breakout vote is required to enter.

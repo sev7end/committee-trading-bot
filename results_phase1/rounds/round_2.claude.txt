@@ -1,0 +1,9 @@
+**Change made:** `trend.weight` 1.0 → 2.0 in `config/params.json` (one weight, nothing else).
+
+**Why this and not something else:**
+
+- In plain terms: the committee currently ranks "the stock just poked above its 20-day high" as more important than "the stock is genuinely in an uptrend." The trade log says that's backwards. Every trade where the trend voter was *neutral* — price and its two moving averages disagreeing, so the stock was chopping or rallying inside a downtrend — averaged a small loss, and those 12 trades in the first half account for the entire first-half deficit that keeps failing the robustness check.
+- The mechanism matters more than the threshold. Because only 5 positions can be open and 952 signals were turned away for lack of a slot, the weights mostly decide *which* candidates get picked, not how many. With trend at 2.0, a clean uptrend with no breakout (score 5.0 + volume) now outranks a breakout in a non-trending stock (4.5 + volume) — an inversion of today's ordering, and the two buckets earn +$77/trade and -$5/trade respectively.
+- I deliberately avoided the tempting alternatives: widening the 1-ATR stop would have been a leverage increase in disguise (position size is pinned by the 20%-of-equity cap, not by `risk_per_trade_pct`, so a wider stop makes each loss bigger rather than each position smaller), and an RSI "don't chase" voter would have vetoed the April–May winners (INTC, AMD, QCOM) that carried the window.
+
+Hypothesis written to `results/rounds/round_2.hypothesis.txt`. I did not run the backtest — the loop's acceptance check will score it.

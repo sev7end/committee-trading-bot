@@ -1,0 +1,1 @@
+Added a momentum voter (60-bar return, weight 1.0) because 865 signals were dropped for lack of slots and today's scores tie at 4.8/6.3, so slot picks were arbitrary.

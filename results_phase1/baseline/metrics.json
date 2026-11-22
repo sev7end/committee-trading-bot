@@ -1,0 +1,49 @@
+{
+  "label": "dumb breakout baseline",
+  "window": {
+    "start": "2025-09-01",
+    "end": "2026-05-31"
+  },
+  "metrics": {
+    "trades": 153,
+    "win_rate": 40.52287581699346,
+    "total_pnl": 4195.650000000001,
+    "avg_pnl": 27.422549019607846,
+    "avg_win": 271.8016129032258,
+    "avg_loss": -139.0774725274725,
+    "win_loss_ratio": 1.9543180355793122,
+    "profit_factor": 1.3315133868782125,
+    "max_drawdown": 2767.6945642939136,
+    "max_drawdown_pct": 10.584647176918981,
+    "recovery_ratio": 1.5159367851236802,
+    "sharpe": 1.5254404622089954,
+    "starting_cash": 25000.0,
+    "ending_equity": 29195.714943202656,
+    "return_pct": 16.78285977281062,
+    "trading_days": 187,
+    "trades_per_day": 0.8181818181818182,
+    "longest_win_streak": 6,
+    "longest_loss_streak": 7,
+    "best_trade": {
+      "symbol": "AMD",
+      "pnl": 856.69
+    },
+    "worst_trade": {
+      "symbol": "WMT",
+      "pnl": -380.61
+    },
+    "exit_reasons": {
+      "stop": 88,
+      "target": 52,
+      "time": 11,
+      "end_of_data": 2
+    }
+  },
+  "skipped": {
+    "no_cash": 0,
+    "max_positions": 141,
+    "already_in": 0,
+    "zero_shares": 0
+  },
+  "params_version": 0
+}

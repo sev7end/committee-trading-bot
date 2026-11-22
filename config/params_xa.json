@@ -1,0 +1,51 @@
+{
+  "version": 4,
+  "_comment": "Book 3: cross-asset trend following on bonds, gold, commodities, currencies and foreign markets. Earns when money leaves US stocks. No SPY regime filter: each asset's own trend decides.",
+  "voters": {
+    "trend": {
+      "enabled": true,
+      "weight": 0.5,
+      "fast": 100,
+      "slow": 250
+    },
+    "breakout": {
+      "enabled": true,
+      "weight": 1.0,
+      "lookback": 55
+    },
+    "momentum": {
+      "enabled": true,
+      "weight": 1.0,
+      "lookback": 180,
+      "full_scale": 0.05
+    },
+    "volatility": {
+      "enabled": true,
+      "weight": 0.5,
+      "atr_period": 14,
+      "atr_pct_min": 0.002,
+      "atr_pct_max": 0.05
+    }
+  },
+  "entry": {
+    "min_score": 3.0,
+    "min_voters_agree": 3
+  },
+  "exit": {
+    "stop_atr": 4.0,
+    "target_atr": 4.0,
+    "max_hold_bars": 20,
+    "atr_period": 14
+  },
+  "risk": {
+    "risk_per_trade_pct": 1.0,
+    "max_position_pct": 25,
+    "vol_target": {
+      "enabled": true,
+      "mode": "self",
+      "lookback": 20,
+      "min_scale": 0.5,
+      "max_scale": 1.5
+    }
+  }
+}

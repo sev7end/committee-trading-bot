@@ -1,0 +1,25 @@
+{
+  "version": 0,
+  "_comment": "The deliberately dumb bot. One rule: buy a 20-day breakout. Every committee candidate must beat this.",
+  "voters": {
+    "breakout": {
+      "enabled": true,
+      "weight": 1.0,
+      "lookback": 20
+    }
+  },
+  "entry": {
+    "min_score": 1.0,
+    "min_voters_agree": 1
+  },
+  "exit": {
+    "stop_atr": 1.0,
+    "target_atr": 2.0,
+    "max_hold_bars": 10,
+    "atr_period": 14
+  },
+  "risk": {
+    "risk_per_trade_pct": 1.0,
+    "max_position_pct": 20
+  }
+}

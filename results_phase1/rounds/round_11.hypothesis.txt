@@ -1,0 +1,1 @@
+Cut trend weight 1.0->0.5 because trend is 1.0 on 167 of 177 trades so it only ranks slots, and the 10 trend=0 trades averaged $165 vs $66 for trend=1.

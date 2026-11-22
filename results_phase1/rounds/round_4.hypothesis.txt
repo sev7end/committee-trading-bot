@@ -1,0 +1,1 @@
+Sped up the market_regime average (sma 50->20) because the whole max drawdown sits in the Sep-Nov chop where SPY stayed above its slow average, so the veto never fired.

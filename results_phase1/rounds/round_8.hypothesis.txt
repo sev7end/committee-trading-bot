@@ -1,0 +1,1 @@
+Widened momentum.full_scale 0.3->0.5 because ~45 of 171 trades tie at momentum 1.0, so scarce slots pick arbitrarily; un-saturating ranks the strongest movers (INTC/AMD) first.

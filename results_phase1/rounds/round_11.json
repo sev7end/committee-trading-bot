@@ -1,0 +1,44 @@
+{
+  "round": 11,
+  "time": "2026-09-14T19:26:10",
+  "hypothesis": "Cut trend weight 1.0->0.5 because trend is 1.0 on 167 of 177 trades so it only ranks slots, and the 10 trend=0 trades averaged $165 vs $66 for trend=1.",
+  "claude_rc": 0,
+  "accepted": false,
+  "reason": "failed: P&L/DD 2.68 >= 5.26",
+  "metrics": {
+    "trades": 177,
+    "win_rate": 40.11299435028249,
+    "total_pnl": 9105.43,
+    "avg_pnl": 51.44310734463277,
+    "avg_win": 369.4101408450705,
+    "avg_loss": -161.5348113207547,
+    "win_loss_ratio": 2.28687635701969,
+    "profit_factor": 1.531775673098094,
+    "max_drawdown": 3397.7859004423117,
+    "max_drawdown_pct": 12.31416503509523,
+    "recovery_ratio": 2.679812756540866,
+    "sharpe": 2.1519473813449568,
+    "starting_cash": 25000.0,
+    "ending_equity": 34105.44190139484,
+    "return_pct": 36.42176760557938,
+    "trading_days": 187,
+    "trades_per_day": 0.946524064171123,
+    "longest_win_streak": 6,
+    "longest_loss_streak": 8,
+    "best_trade": {
+      "symbol": "INTC",
+      "pnl": 1389.22
+    },
+    "worst_trade": {
+      "symbol": "NFLX",
+      "pnl": -487.22
+    },
+    "exit_reasons": {
+      "stop": 99,
+      "target": 63,
+      "time": 11,
+      "end_of_data": 4
+    }
+  },
+  "version": 6
+}

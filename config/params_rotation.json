@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "lookbacks": [
+    252
+  ],
+  "skip": 0,
+  "top_n": 8,
+  "abs_filter": true,
+  "vol_weight": true,
+  "regime_sma": 0,
+  "rebalance": "M",
+  "max_weight": 0.25,
+  "min_history": 260,
+  "vol_lookback": 63,
+  "_comment": "12-month momentum, top 8 of ~150 large caps, inverse-vol weights capped at 25%, cash when momentum is negative"
+}

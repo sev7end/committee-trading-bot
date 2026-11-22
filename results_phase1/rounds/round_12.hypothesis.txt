@@ -1,0 +1,1 @@
+Sped up market_regime sma 20->15 because SPY hugged its 20-day average on 5 chop days that waved through 12 trades losing a net $845, $627 of it in the weak first half.

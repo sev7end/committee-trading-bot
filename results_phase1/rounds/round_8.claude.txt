@@ -1,0 +1,12 @@
+**Change made:** `momentum.full_scale` 0.3 → 0.5 in `config/params.json` (one number, nothing else touched).
+
+**Why this and not something else** — reading `results/best/trades.csv` (171 trades):
+
+- `score_volatility` and `score_market_regime` are **1.0 on every single trade**, and `score_trend` is 1.0 on all but five. Those three are pure gates; they contribute a fixed 4.0 and carry zero information about which candidate gets a slot. So the only thing that actually ranks candidates is `0.5·breakout + 0.8·volume + 1.0·momentum`.
+- Slots are the binding constraint (5 positions, 865 dropped signals), and the profit is a right-tail story: the biggest wins are INTC (+$1,508, +$683, +$668, +$631, +$563, +$557), AMD (+$652, +$627, +$585), QCOM +$662 — stocks in violent uptrends. Losses are capped near 1 ATR, so getting the strongest name into the slot is worth more than avoiding any individual loser.
+- But momentum saturates: roughly 45 of 171 entries sit at exactly 1.000, because `full_scale: 0.3` means anything up ≥30% over 60 bars scores the same. A stock up 90% and a stock up 31% look identical to the ranker. Widening to 0.5 keeps the genuine monsters at 1.0 while pushing merely-decent names down to 0.6-0.9, so ties break toward the names that produce the tail.
+- It should barely change *which* trades are eligible, only their order: the entry gate is 3.5 and trend+volatility+regime already total 4.0. I checked the lowest-total entries (INTC 3.827, JPM 3.825, WMT 3.947/3.958, NVDA 3.949) — all stay above 3.5 after rescaling, so trade count and the ≥30-trade floor are safe.
+
+Ideas I rejected: tightening `atr_pct_max` would have vetoed exactly the high-ATR names (INTC, AMD) that made the second half; widening the stop was already tried and reverted in round 5; and the worst-10 table shows no voter that was simply "wrong" to retune away — every voter was maxed on those losers.
+
+Hypothesis written to `results/rounds/round_8.hypothesis.txt`.

@@ -1,0 +1,1 @@
+Widened exit.stop_atr 1.0->1.5 with target_atr 2.0->3.0 because only 5 of 87 stop-outs gapped past 1.5 ATR, so the 1.0 ATR stop sits inside daily noise; scaling both keeps the 2:1 payoff.

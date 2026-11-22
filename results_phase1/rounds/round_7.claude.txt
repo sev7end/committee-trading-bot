@@ -1,0 +1,18 @@
+**Change made:** `breakout` voter weight `1.5 → 0.5` in `config/params.json`.
+
+**Why (from the trade log, not the P&L headline):**
+
+I split all 165 trades of the best run by what the breakout voter said at signal time:
+
+| breakout vote | trades | total P&L | avg/trade |
+|---|---|---|---|
+| 0 (price inside the 20-day range) | 59 | +$5,397 | **+$91** |
+| +1 (price at a new 20-day high) | 106 | +$4,891 | **+$46** |
+
+The voter is *anti*-predictive. Trades taken when breakout was silent did roughly twice as well per trade as trades taken on a fresh 20-day high. It's also worse where the strategy is weakest: in the first half of the window the breakout=0 trades made about +$2,950 while the breakout=1 trades lost about -$1,950 — that first half only nets +$998 overall, and it's the half the robustness check can fail on. And 8 of the 10 worst trades had breakout = +1.
+
+Plain-English reading: a 20-day high means the stock has just jumped. The stop sits only 1 ATR below entry, so buying the jump means buying right before the normal pullback taps the stop — that's exactly the pattern in the worst trades (1–3 bars held, stopped out, every other voter bullish). Buying the same uptrending stock when it's *not* at a high (a pullback inside the range) gives the stop room. This is consistent with round 3, which forced a breakout vote to be present and lost money.
+
+**Why a weight change and not a filter:** with trend + volatility + market_regime already summing to 4.0 in a bull regime, the 3.5 entry gate is passed with or without breakout — so this barely changes *which* signals qualify. What it changes is the **ranking**. Round 6 established that 865 signals get dropped for lack of slots, so the score is mostly a priority queue. At 1.5 the breakout voter was the loudest tiebreaker and kept steering scarce slots into extended entries; at 0.5 momentum and volume decide instead. I kept it at 0.5 rather than disabling it because breakout entries did work in the strong second half (~+$6,843) — this de-prioritizes them rather than banning them.
+
+Hypothesis written to `results/rounds/round_7.hypothesis.txt`. One change, stopping here.

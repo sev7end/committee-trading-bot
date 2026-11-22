@@ -1,0 +1,1 @@
+Cut breakout weight 1.5->0.5 because the 59 breakout=0 trades averaged $91 vs $46 for the 106 breakout=1 trades, so ranking slots by breakout picks extended tops.

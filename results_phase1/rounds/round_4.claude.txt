@@ -1,0 +1,12 @@
+**Change: `market_regime.sma` 50 → 20** (one number in `config/params.json`).
+
+Why, from the trade log rather than the P&L:
+
+- Every one of the 185 trades entered with `score_volatility = 1.0` and `score_market_regime = 1.0`. The regime voter said "market is fine" on every single entry in the window — including the entire losing stretch. Its slow 50-day average never flipped during the Sept–Nov chop.
+- I walked the closed-trade P&L in date order: the peak is ~22 Sep, and it bleeds down until ~19 Nov (the max drawdown lives entirely in the first half). The losses come in tight clusters around market pullbacks — 10 Oct–17 Oct, 4 Nov–14 Nov — not spread evenly. That is a *market timing* failure, not a stock-picking failure: in those clusters the committee kept voting 5.5–6.3 and kept getting stopped.
+- SPY sat above its 50-day average through those dips but would have been under a 20-day average, so the hard veto established in round 1 (weight 2.0 + min_score 3.5 means regime = −1 blocks all entries) would have fired exactly there.
+- Importantly this should *not* damage the second half, which is where the money was made: in the April–May melt-up SPY stayed above its 20-day average continuously, so those winners survive the filter. It should also re-enter the April rally earlier than the 50-day did (the log shows a dead zone from 6 Mar to 8 Apr).
+
+I considered and rejected widening the stop (`stop_atr` 1.0 → 1.5), which was my first instinct given 99 stops vs 71 targets and 26 trades stopped on day one. Spot-checking the re-entries on the same symbols (GOOGL 3 Feb → next entry at 311 two days later; GOOGL 30 Oct; AMD 10 Oct) showed several of those first-day stops were the start of real declines — a wider stop would have made the first half, already −$555, worse. Note also that position size is capped by `max_position_pct` (20%) on effectively every trade, not by `risk_per_trade_pct`, so a wider stop would not have shrunk the shares to compensate; each loss would simply have been 50% larger.
+
+Hypothesis written to `results/rounds/round_4.hypothesis.txt`. Main risk to watch: a 20-day average whipsaws, so trade count will drop (185 → likely 120–150) and some chop-period winners go with it.

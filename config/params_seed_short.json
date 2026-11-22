@@ -1,0 +1,56 @@
+{
+  "version": 0,
+  "_comment": "neutral seed for a SHORT stock book: same voters, directional votes flipped by the engine (entry.side)",
+  "voters": {
+    "trend": {
+      "enabled": true,
+      "weight": 1.0,
+      "fast": 20,
+      "slow": 50
+    },
+    "breakout": {
+      "enabled": true,
+      "weight": 1.0,
+      "lookback": 20
+    },
+    "volume": {
+      "enabled": true,
+      "weight": 1.0,
+      "lookback": 20,
+      "min_ratio": 1.5
+    },
+    "volatility": {
+      "enabled": true,
+      "weight": 1.0,
+      "atr_period": 14,
+      "atr_pct_min": 0.01,
+      "atr_pct_max": 0.06
+    },
+    "market_regime": {
+      "enabled": true,
+      "weight": 1.0,
+      "sma": 50
+    },
+    "momentum": {
+      "enabled": true,
+      "weight": 1.0,
+      "lookback": 60,
+      "full_scale": 0.3
+    }
+  },
+  "entry": {
+    "min_score": 3.0,
+    "min_voters_agree": 3,
+    "side": "short"
+  },
+  "exit": {
+    "stop_atr": 2.0,
+    "target_atr": 3.0,
+    "max_hold_bars": 10,
+    "atr_period": 14
+  },
+  "risk": {
+    "risk_per_trade_pct": 1.0,
+    "max_position_pct": 20
+  }
+}

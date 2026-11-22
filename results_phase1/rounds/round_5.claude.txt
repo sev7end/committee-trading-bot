@@ -1,0 +1,12 @@
+**Change made (one, in `config/params.json`):**
+
+```
+exit.stop_atr    1.0 -> 1.5
+exit.target_atr  2.0 -> 3.0
+```
+
+In plain terms: the bot was selling at a loss whenever a stock dipped by about one average day's worth of movement — which happens constantly for no reason. It now waits for one-and-a-half days' worth before admitting it's wrong, and correspondingly asks for a bigger profit before taking it, so the "win twice as much as you lose" shape of every trade is untouched.
+
+**The one thing that could go wrong:** `max_hold_bars` is 10, so a 3.0-ATR target is harder to reach before the clock runs out. Some modest winners that currently hit target will instead exit on time at a smaller gain. I judged that cost (~25 trades, maybe $1.5k) smaller than the whipsaw savings (~82 avoided stop-days at ~$170 average loss), and it should help the weak first half most, since that's where the stop-outs cluster.
+
+Hypothesis written to `results/rounds/round_5.hypothesis.txt`. Stopping here for the acceptance check.

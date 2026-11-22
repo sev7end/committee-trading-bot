@@ -1,0 +1,19 @@
+**Round 9 change: added one new voter, `pullback`.**
+
+What I saw in the data: every one of the worst 10 trades had trend, volatility and market_regime all at +1 — the committee was maximally bullish and still wrong. So no existing voter was "wrong"; they were all measuring the same thing (is this an uptrend?) and none of them measured *where in the move you're buying*.
+
+I hand-checked two trades against the raw bars:
+
+| trade | close vs its 20-day average | result |
+|---|---|---|
+| INTC entry 2025-10-29 | ~2.2 ATR above | −$258, stopped in 4 bars |
+| INTC entry 2025-10-03 | ~3.5 ATR above | −$262, stopped in 8 bars |
+| AVGO entry 2025-09-04 (winner) | ~0.1 ATR above | +$799, hit target |
+
+In plain terms: the stop sits 1 ATR below entry. If you buy after a stock has already sprinted 2–3 ATRs away from its own average, the first normal breather takes it straight through your stop. Buying near the average leaves room.
+
+The new voter measures exactly that one thing — `(close − 20-day average) ÷ ATR` — and votes 0 at the average, −1 at 3 ATRs above, linear in between (weight 1.0, deliberately un-saturated so it ranks rather than lumps, the lesson from round 8).
+
+Why this should survive the acceptance rule rather than just shrink the trade count: 148 of the 177 trades score 4.5+, so a penalty of at most 1.0 rarely drops one under the 3.5 gate, and 865 signals are already being discarded for lack of slots — so knocked-out entries get backfilled by less-extended candidates. It mostly reranks.
+
+Files touched: `tradingbot/voters/pullback.py` (new), `config/params.json` (one voter entry added), `results/rounds/round_9.hypothesis.txt`.

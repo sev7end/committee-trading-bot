@@ -1,0 +1,44 @@
+{
+  "round": 9,
+  "time": "2026-09-14T19:17:50",
+  "hypothesis": "Added a pullback voter (close minus 20-day SMA in ATRs, -1 at 3 ATR, weight 1.0) because the worst trades entered 2-3.5 ATR above the average and reverted, while big winners entered near it.",
+  "claude_rc": 0,
+  "accepted": false,
+  "reason": "failed: beats baseline; P&L/DD 1.80 >= 5.26",
+  "metrics": {
+    "trades": 174,
+    "win_rate": 40.804597701149426,
+    "total_pnl": 3714.2000000000003,
+    "avg_pnl": 21.345977011494256,
+    "avg_win": 291.4232394366197,
+    "avg_loss": -164.823786407767,
+    "win_loss_ratio": 1.7680897022693747,
+    "profit_factor": 1.2187802802051029,
+    "max_drawdown": 2067.261943771762,
+    "max_drawdown_pct": 7.767207840682983,
+    "recovery_ratio": 1.7966760386559264,
+    "sharpe": 1.209111990326979,
+    "starting_cash": 25000.0,
+    "ending_equity": 28714.252974513343,
+    "return_pct": 14.857011898053374,
+    "trading_days": 187,
+    "trades_per_day": 0.93048128342246,
+    "longest_win_streak": 6,
+    "longest_loss_streak": 8,
+    "best_trade": {
+      "symbol": "AVGO",
+      "pnl": 798.63
+    },
+    "worst_trade": {
+      "symbol": "NFLX",
+      "pnl": -467.73
+    },
+    "exit_reasons": {
+      "stop": 98,
+      "target": 58,
+      "time": 14,
+      "end_of_data": 4
+    }
+  },
+  "version": 6
+}

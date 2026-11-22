@@ -1,0 +1,44 @@
+{
+  "round": 7,
+  "time": "2026-09-14T19:13:11",
+  "hypothesis": "Cut breakout weight 1.5->0.5 because the 59 breakout=0 trades averaged $91 vs $46 for the 106 breakout=1 trades, so ranking slots by breakout picks extended tops.",
+  "claude_rc": 0,
+  "accepted": true,
+  "reason": "accepted",
+  "metrics": {
+    "trades": 172,
+    "win_rate": 44.76744186046512,
+    "total_pnl": 10687.89,
+    "avg_pnl": 62.1388953488372,
+    "avg_win": 341.7551948051949,
+    "avg_loss": -164.49747368421052,
+    "win_loss_ratio": 2.077571084533918,
+    "profit_factor": 1.6839260369380176,
+    "max_drawdown": 2185.301660678375,
+    "max_drawdown_pct": 8.125652114169954,
+    "recovery_ratio": 4.890807613573221,
+    "sharpe": 2.4859465360601893,
+    "starting_cash": 25000.0,
+    "ending_equity": 35687.93276346302,
+    "return_pct": 42.75173105385206,
+    "trading_days": 187,
+    "trades_per_day": 0.9197860962566845,
+    "longest_win_streak": 6,
+    "longest_loss_streak": 11,
+    "best_trade": {
+      "symbol": "INTC",
+      "pnl": 1507.82
+    },
+    "worst_trade": {
+      "symbol": "NFLX",
+      "pnl": -526.2
+    },
+    "exit_reasons": {
+      "stop": 89,
+      "target": 64,
+      "time": 15,
+      "end_of_data": 4
+    }
+  },
+  "version": 5
+}

@@ -1,0 +1,44 @@
+{
+  "round": 6,
+  "time": "2026-09-14T19:10:02",
+  "hypothesis": "Added a momentum voter (60-bar return, weight 1.0) because 865 signals were dropped for lack of slots and today's scores tie at 4.8/6.3, so slot picks were arbitrary.",
+  "claude_rc": 0,
+  "accepted": true,
+  "reason": "accepted",
+  "metrics": {
+    "trades": 165,
+    "win_rate": 46.666666666666664,
+    "total_pnl": 10287.979999999998,
+    "avg_pnl": 62.35139393939392,
+    "avg_win": 331.81779220779225,
+    "avg_loss": -173.43170454545455,
+    "win_loss_ratio": 1.9132475983987487,
+    "profit_factor": 1.6740916485989052,
+    "max_drawdown": 2218.7209154303346,
+    "max_drawdown_pct": 8.130226681817126,
+    "recovery_ratio": 4.63689683927849,
+    "sharpe": 2.4061425259879976,
+    "starting_cash": 25000.0,
+    "ending_equity": 35288.01861557909,
+    "return_pct": 41.15207446231635,
+    "trading_days": 187,
+    "trades_per_day": 0.8823529411764706,
+    "longest_win_streak": 6,
+    "longest_loss_streak": 7,
+    "best_trade": {
+      "symbol": "INTC",
+      "pnl": 1456.99
+    },
+    "worst_trade": {
+      "symbol": "UNH",
+      "pnl": -898.94
+    },
+    "exit_reasons": {
+      "stop": 82,
+      "target": 65,
+      "time": 14,
+      "end_of_data": 4
+    }
+  },
+  "version": 4
+}

@@ -1,0 +1,7 @@
+One change made: `entry.min_score` 3.5 → 5.0 in `config/params.json:35`.
+
+What it does in plain terms: a stock can no longer get bought just for being in an uptrend on a day the market is healthy — it now has to actually break out to a new 20-day high (the only vote big enough to clear the new bar). Low-volume breakouts are also filtered, since a breakout with volume well below normal lands at 5.5 − 0.8 = 4.7 and misses the gate.
+
+Expected side effects: trade count drops (the freed-up slots go to genuine breakouts instead of drifters), and the first half of the window — where breakouts were scarce but SPY sat above its 50-day, so the old gate kept buying drift — should stop bleeding. Hypothesis written to `results/rounds/round_3.hypothesis.txt`.
+
+Note: no Bash tool is available in this session, so I could not run the backtest to verify — the reasoning above is from the trade log and metrics only.
